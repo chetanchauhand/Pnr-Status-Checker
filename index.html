@@ -1,186 +1,265 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Railway Ticket Status</title>
+    <title>RailCheck | Railway Journey Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- HEADER -->
-    <header class="header">
+<header class="header">
 
-        <div class="logo">
-            🚆 RailCheck
+    <a href="#" class="brand">
+        <img src="logo.svg" alt="RailCheck logo">
+        <span>RailCheck</span>
+    </a>
+
+    <nav>
+        <a href="#search">PNR Status</a>
+        <a href="#search">Seat Availability</a>
+        <a href="#about">About</a>
+
+        <button id="themeBtn" class="theme-btn" aria-label="Change theme">
+            Dark
+        </button>
+    </nav>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="eyebrow">SMART RAILWAY DASHBOARD</span>
+
+        <h1>
+            Know your train.
+            <span>Before you travel.</span>
+        </h1>
+
+        <p>
+            Check PNR status and find seat availability
+            between specific stations on a train journey.
+        </p>
+
+        <div class="hero-points">
+            <span>PNR Status</span>
+            <span>Seat Availability</span>
+            <span>Journey Segments</span>
         </div>
 
-        <nav>
-            <a href="#search">PNR Status</a>
-            <a href="#seat">Seat Search</a>
-            <a href="#about">About</a>
+    </div>
 
-            <button id="themeBtn">🌙</button>
-        </nav>
-
-    </header>
+</section>
 
 
-    <!-- HERO -->
-    <section class="hero">
+<section class="search-section" id="search">
 
-        <div class="hero-content">
+    <div class="search-card">
 
-            <p class="small-title">SMART RAILWAY DASHBOARD</p>
+        <div class="tabs">
 
-            <h1>
-                Check Your
-                <span>Journey Status</span>
-            </h1>
+            <button class="tab active" id="pnrTab">
+                PNR Status
+            </button>
 
-            <p>
-                Check PNR, passenger seat, boarding station,
-                destination and ticket status from one dashboard.
-            </p>
+            <button class="tab" id="seatTab">
+                Seat Availability
+            </button>
 
         </div>
 
-    </section>
 
+        <!-- PNR SEARCH -->
 
-    <!-- SEARCH SECTION -->
-    <section class="search-section" id="search">
+        <div id="pnrSearch">
 
-        <div class="search-card">
-
-            <div class="tabs">
-
-                <button class="tab active" id="pnrTab">
-                    PNR Search
-                </button>
-
-                <button class="tab" id="seatTab">
-                    Seat Search
-                </button>
-
-            </div>
-
-
-            <!-- PNR SEARCH -->
-
-            <div id="pnrSearch">
-
+            <div class="section-heading">
                 <h2>Check PNR Status</h2>
 
-                <p class="description">
-                    Enter your 10 digit PNR number.
+                <p>
+                    Enter your 10-digit PNR to view your journey and
+                    current ticket status.
                 </p>
+            </div>
 
-                <div class="input-row">
+            <div class="input-row">
+
+                <div class="input-group">
+                    <label for="pnrInput">PNR Number</label>
 
                     <input
                         type="text"
                         id="pnrInput"
-                        placeholder="Example: 1234567890"
+                        placeholder="Enter 10-digit PNR"
                         maxlength="10"
+                        inputmode="numeric"
                     >
-
-                    <button id="pnrBtn">
-                        Check Status
-                    </button>
-
                 </div>
+
+                <button id="pnrBtn" class="primary-btn">
+                    Check PNR
+                </button>
 
             </div>
 
+        </div>
 
-            <!-- SEAT SEARCH -->
 
-            <div id="seatSearch" class="hidden">
+        <!-- SEGMENT SEAT SEARCH -->
 
-                <h2>Find Seat Passenger</h2>
+        <div id="seatSearch" class="hidden">
 
-                <p class="description">
-                    Find who is travelling on a particular seat.
+            <div class="section-heading">
+                <h2>Find Seat Availability</h2>
+
+                <p>
+                    Check which seats are reserved for your journey
+                    segment and where they become occupied.
                 </p>
+            </div>
 
-                <div class="seat-inputs">
+
+            <div class="availability-grid">
+
+                <div class="input-group">
+
+                    <label for="fromInput">
+                        From Station
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fromInput"
+                        placeholder="e.g. Ludhiana"
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="toInput">
+                        To Station
+                    </label>
+
+                    <input
+                        type="text"
+                        id="toInput"
+                        placeholder="e.g. Delhi"
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="dateInput">
+                        Journey Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="dateInput"
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="trainInput">
+                        Train Number
+                    </label>
 
                     <input
                         type="text"
                         id="trainInput"
-                        placeholder="Train Number"
+                        placeholder="e.g. 12925"
                     >
 
-                    <input
-                        type="text"
-                        id="coachInput"
-                        placeholder="Coach e.g. S4"
-                    >
+                </div>
 
-                    <input
-                        type="number"
-                        id="seatInput"
-                        placeholder="Seat No."
-                    >
 
-                    <button id="seatBtn">
-                        Search Seat
-                    </button>
+                <div class="input-group">
+
+                    <label for="classInput">
+                        Class
+                    </label>
+
+                    <select id="classInput">
+
+                        <option value="SL">Sleeper (SL)</option>
+                        <option value="3A">AC 3 Tier (3A)</option>
+                        <option value="2A">AC 2 Tier (2A)</option>
+                        <option value="1A">First AC (1A)</option>
+
+                    </select>
 
                 </div>
 
             </div>
 
-        </div>
 
-    </section>
-
-
-    <!-- RESULT -->
-    <main id="result" class="result-container">
-
-        <div class="welcome-card">
-
-            <div class="welcome-icon">
-                🚆
-            </div>
-
-            <h2>Search Your Journey</h2>
-
-            <p>
-                Enter a PNR number or search a specific
-                train seat to see passenger journey details.
-            </p>
+            <button id="seatBtn" class="primary-btn full-btn">
+                Search Seat Availability
+            </button>
 
         </div>
 
-    </main>
+    </div>
+
+</section>
 
 
-    <!-- FOOTER -->
+<main id="result" class="result-container">
 
-    <footer id="about">
+    <div class="welcome-card">
 
-        <h3>RailCheck</h3>
+        <div class="welcome-icon">
+            <img src="logo.svg" alt="">
+        </div>
+
+        <h2>Plan your railway journey</h2>
 
         <p>
-            Railway ticket status dashboard
+            Check your PNR or search for seats available
+            between your selected stations.
         </p>
 
-        <p>
-            Demo project built with HTML, CSS and JavaScript
-        </p>
+    </div>
 
-    </footer>
+</main>
 
 
-    <script src="script.js"></script>
+<footer id="about">
+
+    <div class="footer-brand">
+        <img src="logo.svg" alt="RailCheck logo">
+        <strong>RailCheck</strong>
+    </div>
+
+    <p>
+        Smart railway journey information dashboard.
+    </p>
+
+    <span>
+        Frontend project • HTML • CSS • JavaScript
+    </span>
+
+</footer>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>
-```

@@ -1,18 +1,21 @@
-
 /*
     RAILCHECK
-    Frontend Demo
+    Railway Journey Frontend
 
-    IMPORTANT:
-    This data is currently stored in JavaScript.
+    CURRENT:
+    Demo railway data is used.
 
-    Later you can replace this with:
-    fetch("http://localhost:8080/api/pnr/1234567890")
+    LATER:
+    Replace demo functions with your backend API.
+
+    Example:
+
+    fetch(`/api/trains/availability?train=12925&from=LDH&to=NDLS`)
 */
 
 
 // ========================================
-// DEMO DATABASE
+// DEMO DATA
 // ========================================
 
 const railwayData = {
@@ -25,7 +28,7 @@ const railwayData = {
 
         trainName: "Paschim Express",
 
-        date: "20 September 2026",
+        date: "2026-09-25",
 
         from: "Ludhiana",
 
@@ -39,70 +42,15 @@ const railwayData = {
 
         arrival: "05:20",
 
-        passengers: [
+        status: "CNF",
 
-            {
-                name: "Rahul Kumar",
+        coach: "S4",
 
-                age: 22,
+        seat: "32",
 
-                bookingStatus: "CNF",
+        boarding: "Ludhiana",
 
-                coach: "S4",
-
-                seat: 32,
-
-                boarding: "Ludhiana",
-
-                boardingCode: "LDH",
-
-                destination: "New Delhi",
-
-                destinationCode: "NDLS"
-            },
-
-            {
-                name: "Aman Singh",
-
-                age: 21,
-
-                bookingStatus: "RAC",
-
-                coach: "S4",
-
-                seat: 45,
-
-                boarding: "Ludhiana",
-
-                boardingCode: "LDH",
-
-                destination: "New Delhi",
-
-                destinationCode: "NDLS"
-            },
-
-            {
-                name: "Rohit Sharma",
-
-                age: 20,
-
-                bookingStatus: "WL",
-
-                coach: "-",
-
-                seat: "-",
-
-                boarding: "Ambala",
-
-                boardingCode: "UMB",
-
-                destination: "New Delhi",
-
-                destinationCode: "NDLS"
-            }
-
-        ]
-
+        destination: "New Delhi"
     },
 
 
@@ -114,7 +62,7 @@ const railwayData = {
 
         trainName: "New Delhi Shatabdi",
 
-        date: "22 September 2026",
+        date: "2026-09-26",
 
         from: "Amritsar",
 
@@ -128,79 +76,111 @@ const railwayData = {
 
         arrival: "11:15",
 
-        passengers: [
+        status: "CNF",
+
+        coach: "C2",
+
+        seat: "18",
+
+        boarding: "Amritsar",
+
+        destination: "New Delhi"
+    }
+
+};
+
+
+// ========================================
+// SEGMENT-WISE DEMO DATA
+// ========================================
+
+const seatAvailabilityData = {
+
+    "12925": {
+
+        trainName: "Paschim Express",
+
+        date: "2026-09-25",
+
+        class: "SL",
+
+        stations: [
 
             {
-                name: "Chetan",
+                name: "Amritsar",
+                code: "ASR"
+            },
 
-                age: 21,
+            {
+                name: "Jalandhar",
+                code: "JUC"
+            },
 
-                bookingStatus: "CNF",
+            {
+                name: "Ludhiana",
+                code: "LDH"
+            },
 
-                coach: "C2",
+            {
+                name: "Ambala",
+                code: "UMB"
+            },
 
-                seat: 18,
+            {
+                name: "New Delhi",
+                code: "NDLS"
+            }
 
-                boarding: "Amritsar",
+        ],
 
-                boardingCode: "ASR",
+        seats: [
 
+            {
+                coach: "S4",
+                seat: "32",
+                reservedFrom: "Ludhiana",
+                reservedFromCode: "LDH",
                 destination: "New Delhi",
+                destinationCode: "NDLS"
+            },
 
+            {
+                coach: "S4",
+                seat: "33",
+                reservedFrom: "Ambala",
+                reservedFromCode: "UMB",
+                destination: "New Delhi",
+                destinationCode: "NDLS"
+            },
+
+            {
+                coach: "S4",
+                seat: "34",
+                reservedFrom: "Jalandhar",
+                reservedFromCode: "JUC",
+                destination: "Ambala",
+                destinationCode: "UMB"
+            },
+
+            {
+                coach: "S4",
+                seat: "35",
+                reservedFrom: "Ludhiana",
+                reservedFromCode: "LDH",
+                destination: "Ambala",
+                destinationCode: "UMB"
+            },
+
+            {
+                coach: "S4",
+                seat: "36",
+                reservedFrom: "New Delhi",
+                reservedFromCode: "NDLS",
+                destination: "New Delhi",
                 destinationCode: "NDLS"
             }
 
         ]
-
-    },
-
-
-    "5555555555": {
-
-        pnr: "5555555555",
-
-        trainNumber: "12424",
-
-        trainName: "Dibrugarh Rajdhani",
-
-        date: "25 September 2026",
-
-        from: "New Delhi",
-
-        fromCode: "NDLS",
-
-        to: "Dibrugarh",
-
-        toCode: "DBRG",
-
-        departure: "16:10",
-
-        arrival: "07:00",
-
-        passengers: [
-
-            {
-                name: "Vikas",
-
-                age: 24,
-
-                bookingStatus: "RAC",
-
-                coach: "B2",
-
-                seat: 21,
-
-                boarding: "New Delhi",
-
-                boardingCode: "NDLS",
-
-                destination: "Dibrugarh",
-
-                destinationCode: "DBRG"
-            }
-
-        ]
-
     }
 
 };
@@ -211,18 +191,21 @@ const railwayData = {
 // ========================================
 
 const pnrTab = document.getElementById("pnrTab");
-
 const seatTab = document.getElementById("seatTab");
 
 const pnrSearch = document.getElementById("pnrSearch");
-
 const seatSearch = document.getElementById("seatSearch");
 
 const pnrBtn = document.getElementById("pnrBtn");
-
 const seatBtn = document.getElementById("seatBtn");
 
 const pnrInput = document.getElementById("pnrInput");
+
+const fromInput = document.getElementById("fromInput");
+const toInput = document.getElementById("toInput");
+const dateInput = document.getElementById("dateInput");
+const trainInput = document.getElementById("trainInput");
+const classInput = document.getElementById("classInput");
 
 const result = document.getElementById("result");
 
@@ -236,11 +219,9 @@ const themeBtn = document.getElementById("themeBtn");
 pnrTab.addEventListener("click", function () {
 
     pnrTab.classList.add("active");
-
     seatTab.classList.remove("active");
 
     pnrSearch.classList.remove("hidden");
-
     seatSearch.classList.add("hidden");
 
 });
@@ -249,11 +230,9 @@ pnrTab.addEventListener("click", function () {
 seatTab.addEventListener("click", function () {
 
     seatTab.classList.add("active");
-
     pnrTab.classList.remove("active");
 
     seatSearch.classList.remove("hidden");
-
     pnrSearch.classList.add("hidden");
 
 });
@@ -267,23 +246,15 @@ pnrBtn.addEventListener("click", function () {
 
     const pnr = pnrInput.value.trim();
 
-    if (pnr.length !== 10) {
+    if (!/^\d{10}$/.test(pnr)) {
 
-        showError("Please enter a valid 10 digit PNR.");
+        showError("Please enter a valid 10-digit PNR.");
 
         return;
     }
 
 
-    // Show loading
-
-    result.innerHTML = `
-        <div class="welcome-card">
-            <div class="welcome-icon">🔎</div>
-            <h2>Checking PNR...</h2>
-            <p>Please wait.</p>
-        </div>
-    `;
+    showLoading("Checking PNR status...");
 
 
     setTimeout(function () {
@@ -293,7 +264,7 @@ pnrBtn.addEventListener("click", function () {
         if (!data) {
 
             showError(
-                "PNR not found in demo database. Try 1234567890 or 9876543210."
+                "PNR not available in demo data. Try 1234567890 or 9876543210."
             );
 
             return;
@@ -301,7 +272,7 @@ pnrBtn.addEventListener("click", function () {
 
         displayPNR(data);
 
-    }, 700);
+    }, 600);
 
 });
 
@@ -312,123 +283,29 @@ pnrBtn.addEventListener("click", function () {
 
 function displayPNR(data) {
 
-    let passengerHTML = "";
-
-
-    data.passengers.forEach(function (passenger, index) {
-
-        let statusClass = "waiting";
-
-        if (passenger.bookingStatus === "CNF") {
-
-            statusClass = "confirmed";
-
-        } else if (passenger.bookingStatus === "RAC") {
-
-            statusClass = "rac";
-
-        } else if (passenger.bookingStatus === "CAN") {
-
-            statusClass = "cancelled";
-        }
-
-
-        passengerHTML += `
-
-            <div class="passenger">
-
-                <div>
-                    <span class="label">
-                        Passenger
-                    </span>
-
-                    <div class="passenger-name">
-                        ${index + 1}. ${passenger.name}
-                    </div>
-
-                    <small>
-                        Age: ${passenger.age}
-                    </small>
-                </div>
-
-
-                <div>
-
-                    <span class="label">
-                        Status
-                    </span>
-
-                    <span class="status ${statusClass}">
-                        ${getFullStatus(passenger.bookingStatus)}
-                    </span>
-
-                </div>
-
-
-                <div>
-
-                    <span class="label">
-                        Coach / Seat
-                    </span>
-
-                    <strong>
-                        ${passenger.coach} / ${passenger.seat}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span class="label">
-                        Boarding
-                    </span>
-
-                    <strong>
-                        ${passenger.boarding}
-                        (${passenger.boardingCode})
-                    </strong>
-
-                </div>
-
-            </div>
-
-        `;
-    });
-
-
     result.innerHTML = `
 
-        <div class="train-card">
+        <div class="result-card">
 
-            <div class="train-header">
+            <div class="result-header">
 
                 <div>
 
                     <div class="train-name">
-
                         ${data.trainName}
-
                     </div>
 
-                    <div class="pnr-number">
-
+                    <div class="train-number">
                         Train No. ${data.trainNumber}
-
                     </div>
 
                 </div>
 
-
                 <div>
 
-                    <span class="label">
-                        PNR
+                    <span class="status confirmed">
+                        ${getFullStatus(data.status)}
                     </span>
-
-                    <strong>
-                        ${data.pnr}
-                    </strong>
 
                 </div>
 
@@ -439,88 +316,121 @@ function displayPNR(data) {
 
                 <div class="station">
 
-                    <span class="label">
-                        DEPARTURE
+                    <div class="station-code">
+                        ${data.fromCode}
+                    </div>
+
+                    <div class="station-name">
+                        ${data.from}
+                    </div>
+
+                    <span class="station-time">
+                        ${data.departure}
                     </span>
 
-                    <h3>
-                        ${data.fromCode}
-                    </h3>
-
-                    <p>
-                        ${data.from}
-                    </p>
-
-                    <strong>
-                        ${data.departure}
-                    </strong>
-
                 </div>
 
 
-                <div class="arrow">
-                    →
-                </div>
+                <div class="route-line"></div>
 
 
                 <div class="station">
 
-                    <span class="label">
-                        ARRIVAL
-                    </span>
-
-                    <h3>
+                    <div class="station-code">
                         ${data.toCode}
-                    </h3>
+                    </div>
 
-                    <p>
+                    <div class="station-name">
                         ${data.to}
-                    </p>
+                    </div>
 
-                    <strong>
+                    <span class="station-time">
                         ${data.arrival}
-                    </strong>
+                    </span>
 
                 </div>
 
             </div>
 
 
-            <div class="boarding-box">
+            <div class="info-grid">
 
-                <h3>
-                    📍 Passenger Journey Information
-                </h3>
+                <div class="info-box">
 
-                <p>
-                    Each passenger's boarding station and
-                    destination are shown below.
-                </p>
+                    <span class="info-label">
+                        PNR
+                    </span>
 
-            </div>
+                    <span class="info-value">
+                        ${data.pnr}
+                    </span>
 
-
-            <div class="passenger-section">
-
-                <h2>
-                    Passenger Details
-                </h2>
-
-                ${passengerHTML}
-
-            </div>
+                </div>
 
 
-            <div class="boarding-box">
+                <div class="info-box">
 
-                <h3>
-                    🧭 Important
-                </h3>
+                    <span class="info-label">
+                        Coach / Seat
+                    </span>
 
-                <p>
-                    Passenger must board the train from the
-                    boarding station shown in their ticket.
-                </p>
+                    <span class="info-value">
+                        ${data.coach} / ${data.seat}
+                    </span>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Boarding
+                    </span>
+
+                    <span class="info-value">
+                        ${data.boarding}
+                    </span>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Destination
+                    </span>
+
+                    <span class="info-value">
+                        ${data.destination}
+                    </span>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Journey Date
+                    </span>
+
+                    <span class="info-value">
+                        ${formatDate(data.date)}
+                    </span>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Ticket Status
+                    </span>
+
+                    <span class="info-value">
+                        ${getFullStatus(data.status)}
+                    </span>
+
+                </div>
 
             </div>
 
@@ -531,241 +441,226 @@ function displayPNR(data) {
 
 
 // ========================================
-// SEAT SEARCH
+// SEGMENT-WISE SEAT SEARCH
 // ========================================
 
 seatBtn.addEventListener("click", function () {
 
-    const train = document
-        .getElementById("trainInput")
-        .value
-        .trim();
-
-    const coach = document
-        .getElementById("coachInput")
-        .value
-        .trim()
-        .toUpperCase();
-
-    const seat = document
-        .getElementById("seatInput")
-        .value
-        .trim();
+    const from = fromInput.value.trim();
+    const to = toInput.value.trim();
+    const date = dateInput.value;
+    const train = trainInput.value.trim();
+    const selectedClass = classInput.value;
 
 
-    if (!train || !coach || !seat) {
-
-        showError("Please enter train, coach and seat.");
-
-        return;
-    }
-
-
-    let foundPassenger = null;
-
-    let foundTrain = null;
-
-
-    // Search through demo database
-
-    for (const pnr in railwayData) {
-
-        const data = railwayData[pnr];
-
-        if (data.trainNumber !== train) {
-            continue;
-        }
-
-
-        for (const passenger of data.passengers) {
-
-            if (
-                passenger.coach === coach &&
-                String(passenger.seat) === seat
-            ) {
-
-                foundPassenger = passenger;
-
-                foundTrain = data;
-
-                break;
-            }
-        }
-
-
-        if (foundPassenger) {
-            break;
-        }
-
-    }
-
-
-    if (!foundPassenger) {
+    if (!from || !to || !date || !train) {
 
         showError(
-            "No passenger found for this train and seat in demo data."
+            "Please enter From, To, Date and Train Number."
         );
 
         return;
     }
 
 
-    displaySeatResult(foundPassenger, foundTrain);
+    if (from.toLowerCase() === to.toLowerCase()) {
+
+        showError(
+            "From and To stations cannot be the same."
+        );
+
+        return;
+    }
+
+
+    showLoading("Checking segment-wise seat availability...");
+
+
+    setTimeout(function () {
+
+        const trainData = seatAvailabilityData[train];
+
+
+        if (!trainData) {
+
+            showError(
+                "This train is not available in demo data. Try train 12925."
+            );
+
+            return;
+        }
+
+
+        if (trainData.date !== date) {
+
+            showError(
+                `Demo data for this train is available for ${formatDate(trainData.date)}.`
+            );
+
+            return;
+        }
+
+
+        displaySegmentAvailability(
+            trainData,
+            from,
+            to,
+            selectedClass
+        );
+
+    }, 700);
 
 });
 
 
 // ========================================
-// DISPLAY SEAT RESULT
+// SEGMENT AVAILABILITY
 // ========================================
 
-function displaySeatResult(passenger, train) {
+function displaySegmentAvailability(
+    trainData,
+    from,
+    to,
+    selectedClass
+) {
+
+    const fromIndex = findStationIndex(
+        trainData.stations,
+        from
+    );
+
+    const toIndex = findStationIndex(
+        trainData.stations,
+        to
+    );
+
+
+    if (fromIndex === -1 || toIndex === -1) {
+
+        showError(
+            "Station not found in this demo train route. Try Ludhiana, Ambala or New Delhi."
+        );
+
+        return;
+    }
+
+
+    if (fromIndex >= toIndex) {
+
+        showError(
+            "Please select stations in the same journey direction."
+        );
+
+        return;
+    }
+
+
+    const relevantSeats = trainData.seats.filter(function (seat) {
+
+        return isSeatRelevantForSegment(
+            seat,
+            trainData.stations,
+            fromIndex,
+            toIndex
+        );
+
+    });
+
 
     result.innerHTML = `
 
-        <div class="seat-result">
+        <div class="result-card">
 
-            <h2>
-                🎫 Seat Information
-            </h2>
+            <div class="result-header">
+
+                <div>
+
+                    <div class="train-name">
+                        ${trainData.trainName}
+                    </div>
+
+                    <div class="train-number">
+                        Train No. ${Object.keys(seatAvailabilityData).find(
+                            key => seatAvailabilityData[key] === trainData
+                        )}
+                        • ${selectedClass}
+                    </div>
+
+                </div>
+
+                <span class="status confirmed">
+                    ${relevantSeats.length} seats found
+                </span>
+
+            </div>
 
 
-            <div class="seat-info">
+            <div class="journey">
 
-                <div class="info-box">
+                <div class="station">
 
-                    <span class="label">
-                        Passenger
-                    </span>
+                    <div class="station-code">
+                        ${trainData.stations[fromIndex].code}
+                    </div>
 
-                    <strong>
-                        ${passenger.name}
-                    </strong>
+                    <div class="station-name">
+                        ${trainData.stations[fromIndex].name}
+                    </div>
 
                 </div>
 
 
-                <div class="info-box">
-
-                    <span class="label">
-                        PNR
-                    </span>
-
-                    <strong>
-                        ${train.pnr}
-                    </strong>
-
-                </div>
+                <div class="route-line"></div>
 
 
-                <div class="info-box">
+                <div class="station">
 
-                    <span class="label">
-                        Train
-                    </span>
+                    <div class="station-code">
+                        ${trainData.stations[toIndex].code}
+                    </div>
 
-                    <strong>
-                        ${train.trainNumber}
-                        - ${train.trainName}
-                    </strong>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <span class="label">
-                        Coach / Seat
-                    </span>
-
-                    <strong>
-                        ${passenger.coach}
-                        / ${passenger.seat}
-                    </strong>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <span class="label">
-                        Boarding Station
-                    </span>
-
-                    <strong>
-                        ${passenger.boarding}
-                        (${passenger.boardingCode})
-                    </strong>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <span class="label">
-                        Destination
-                    </span>
-
-                    <strong>
-                        ${passenger.destination}
-                        (${passenger.destinationCode})
-                    </strong>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <span class="label">
-                        Journey Date
-                    </span>
-
-                    <strong>
-                        ${train.date}
-                    </strong>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <span class="label">
-                        Ticket Status
-                    </span>
-
-                    <strong>
-                        ${getFullStatus(passenger.bookingStatus)}
-                    </strong>
+                    <div class="station-name">
+                        ${trainData.stations[toIndex].name}
+                    </div>
 
                 </div>
 
             </div>
 
 
-            <div class="boarding-box">
+            <div class="segment-title">
 
-                <h3>
-                    📍 Boarding Station
-                </h3>
+                <h2>
+                    Seat-wise journey segment
+                </h2>
 
                 <p>
-
-                    Passenger <strong>${passenger.name}</strong>
-                    will board from
-
-                    <strong>
-                        ${passenger.boarding}
-                        (${passenger.boardingCode})
-                    </strong>
-
-                    and travel to
-
-                    <strong>
-                        ${passenger.destination}
-                        (${passenger.destinationCode})
-                    </strong>.
-
+                    These are demo reservation segments.
+                    Actual availability will come from the railway data source.
                 </p>
+
+            </div>
+
+
+            <div class="segment-list">
+
+                ${renderSeatRows(
+                    relevantSeats,
+                    trainData.stations,
+                    fromIndex,
+                    toIndex
+                )}
+
+            </div>
+
+
+            <div class="notice">
+
+                <strong>How this works:</strong>
+                A seat reserved from a later station can appear free
+                before that boarding station. Actual booking availability
+                must always be confirmed through the authorized railway
+                reservation system.
 
             </div>
 
@@ -776,36 +671,233 @@ function displaySeatResult(passenger, train) {
 
 
 // ========================================
-// STATUS TEXT
+// CHECK SEAT SEGMENT
 // ========================================
 
-function getFullStatus(status) {
+function isSeatRelevantForSegment(
+    seat,
+    stations,
+    fromIndex,
+    toIndex
+) {
 
-    if (status === "CNF") {
+    const reservedFromIndex = findStationIndex(
+        stations,
+        seat.reservedFrom
+    );
 
-        return "CONFIRMED";
+    const reservedToIndex = findStationIndex(
+        stations,
+        seat.destination
+    );
 
+
+    if (reservedFromIndex === -1) {
+        return false;
     }
 
-    if (status === "RAC") {
 
-        return "RAC";
+    /*
+        We show seats whose reservation overlaps
+        or begins after the user's boarding station.
 
+        Example:
+
+        User: Ludhiana → Ambala
+
+        Seat: Ambala → Delhi
+        Result: FREE BEFORE AMBALA
+
+        Seat: Ludhiana → Delhi
+        Result: RESERVED
+    */
+
+    const overlaps =
+        reservedFromIndex < toIndex &&
+        reservedToIndex > fromIndex;
+
+
+    const startsAfterUser =
+        reservedFromIndex >= toIndex;
+
+
+    return overlaps || startsAfterUser;
+}
+
+
+// ========================================
+// RENDER SEAT ROWS
+// ========================================
+
+function renderSeatRows(
+    seats,
+    stations,
+    fromIndex,
+    toIndex
+) {
+
+    if (seats.length === 0) {
+
+        return `
+            <div class="notice">
+                No matching seat information found in demo data.
+            </div>
+        `;
     }
 
-    if (status === "WL") {
 
-        return "WAITING";
+    return seats.map(function (seat) {
 
-    }
+        const reservedFromIndex = findStationIndex(
+            stations,
+            seat.reservedFrom
+        );
 
-    if (status === "CAN") {
+        const reservedToIndex = findStationIndex(
+            stations,
+            seat.destination
+        );
 
-        return "CANCELLED";
 
-    }
+        const isReservedDuringSegment =
+            reservedFromIndex < toIndex &&
+            reservedToIndex > fromIndex;
 
-    return status;
+
+        if (!isReservedDuringSegment) {
+
+            return `
+
+                <div class="seat-row">
+
+                    <div class="seat-number">
+                        ${seat.coach}-${seat.seat}
+                    </div>
+
+                    <div class="seat-route">
+
+                        Free until
+                        <strong>
+                            ${seat.reservedFrom}
+                        </strong>
+
+                        <br>
+
+                        <span>
+                            Reserved: ${seat.reservedFrom}
+                            → ${seat.destination}
+                        </span>
+
+                    </div>
+
+                    <div class="segment-status">
+
+                        <span class="badge partial-badge">
+                            Free before ${seat.reservedFrom}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            `;
+        }
+
+
+        return `
+
+            <div class="seat-row">
+
+                <div class="seat-number">
+                    ${seat.coach}-${seat.seat}
+                </div>
+
+                <div class="seat-route">
+
+                    <strong>
+                        ${seat.reservedFrom}
+                    </strong>
+
+                    →
+                    
+                    <strong>
+                        ${seat.destination}
+                    </strong>
+
+                    <br>
+
+                    <span>
+                        Seat is reserved on this segment
+                    </span>
+
+                </div>
+
+                <div class="segment-status">
+
+                    <span class="badge reserved-badge">
+                        Reserved
+                    </span>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }).join("");
+
+}
+
+
+// ========================================
+// FIND STATION
+// ========================================
+
+function findStationIndex(stations, stationName) {
+
+    const search = stationName
+        .toLowerCase()
+        .trim();
+
+
+    return stations.findIndex(function (station) {
+
+        return (
+            station.name.toLowerCase() === search ||
+            station.code.toLowerCase() === search
+        );
+
+    });
+
+}
+
+
+// ========================================
+// LOADING
+// ========================================
+
+function showLoading(message) {
+
+    result.innerHTML = `
+
+        <div class="welcome-card">
+
+            <div class="welcome-icon">
+                <img src="logo.svg" alt="">
+            </div>
+
+            <h2>
+                ${message}
+            </h2>
+
+            <p>
+                Please wait...
+            </p>
+
+        </div>
+
+    `;
+
 }
 
 
@@ -819,12 +911,8 @@ function showError(message) {
 
         <div class="welcome-card">
 
-            <div class="welcome-icon">
-                ⚠️
-            </div>
-
             <h2>
-                Search Result
+                Search unavailable
             </h2>
 
             <p>
@@ -834,6 +922,47 @@ function showError(message) {
         </div>
 
     `;
+
+}
+
+
+// ========================================
+// STATUS
+// ========================================
+
+function getFullStatus(status) {
+
+    const statusMap = {
+
+        CNF: "CONFIRMED",
+        RAC: "RAC",
+        WL: "WAITING",
+        CAN: "CANCELLED"
+
+    };
+
+    return statusMap[status] || status;
+
+}
+
+
+// ========================================
+// DATE
+// ========================================
+
+function formatDate(dateString) {
+
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
 }
 
 
@@ -845,31 +974,26 @@ themeBtn.addEventListener("click", function () {
 
     document.body.classList.toggle("dark");
 
+    const isDark =
+        document.body.classList.contains("dark");
 
-    if (document.body.classList.contains("dark")) {
 
-        themeBtn.textContent = "☀️";
+    themeBtn.textContent =
+        isDark ? "Light" : "Dark";
 
-        localStorage.setItem("theme", "dark");
 
-    } else {
-
-        themeBtn.textContent = "🌙";
-
-        localStorage.setItem("theme", "light");
-
-    }
+    localStorage.setItem(
+        "theme",
+        isDark ? "dark" : "light"
+    );
 
 });
 
-
-// Load saved theme
 
 if (localStorage.getItem("theme") === "dark") {
 
     document.body.classList.add("dark");
 
-    themeBtn.textContent = "☀️";
+    themeBtn.textContent = "Light";
 
 }
-```
